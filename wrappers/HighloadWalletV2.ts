@@ -7,9 +7,11 @@ import {
   contractAddress,
   ContractProvider,
   Dictionary,
+  internal,
   loadMessageRelaxed,
   MessageRelaxed,
   Sender,
+  SenderArguments,
   SendMode,
   Slice,
   storeMessageRelaxed,
@@ -151,9 +153,39 @@ export class HighloadWalletV2 implements Contract {
   }
 
   /**
-   * Create sender
+   * Create a default sender (sends 1 message per time)
    */
-  sender(provider: ContractProvider, secretKey: Buffer): BatchSender {
-    return new BatchSender(provider, this, secretKey);
+  sender(provider: ContractProvider, secretKey: Buffer): Sender {
+    return {
+      send: (args: SenderArguments) =>
+        this.sendTransfer(provider, {
+          queryId: this.generateQueryId(),
+          messages: [
+            [
+              internal({
+                to: args.to,
+                value: args.value,
+                init: args.init,
+                body: args.body,
+                bounce: args.bounce,
+              }),
+              args.sendMode ?? SendMode.PAY_GAS_SEPARATELY,
+            ],
+          ],
+          secretKey,
+        }),
+    };
+  }
+
+  /**
+   * Create a batch sender (sends as many messages as needed).
+   * Non-compatible with `Blockchain` from `@ton/sandbox`.
+   */
+  batchSender(
+    provider: ContractProvider,
+    secretKey: Buffer,
+    batchSize: number,
+  ): BatchSender {
+    return new BatchSender(provider, this, secretKey, batchSize);
   }
 }

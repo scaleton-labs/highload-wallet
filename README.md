@@ -1,6 +1,6 @@
-# Highload Wallet
+# Highload Wallet V2
 
-Wrapper for [highload wallet v2](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-code.fc).
+Wrapper for [Highload Wallet V2](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-code.fc) contract.
 
 ## How to use
 
@@ -8,7 +8,7 @@ Wrapper for [highload wallet v2](https://github.com/ton-blockchain/ton/blob/mast
 import { HighloadWalletV2 } from "@scaleton/highload-wallet";
 
 const highloadWallet = new HighloadWalletV2(keyPair.publicKey);
-const sender = highloadWallet.sender(keyPair.privateKey);
+const sender = highloadWallet.batchSender(keyPair.privateKey, 100); // Accumulates messagens and sends chunks (100 messages per each).
 
 await myContract.sendSomething(sender, { /* ... */ });
 

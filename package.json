@@ -1,11 +1,16 @@
 {
     "name": "@scaleton/highload-wallet",
-    "version": "0.0.2",
+    "description": "Wrapper for Highload Wallet V2 contract.",
+    "version": "0.1.0",
     "repository": {
         "type": "git",
-        "url": "git@github.com:scaleton-labs/highload-wallet"
+        "url": "git+https://github.com/scaleton-labs/highload-wallet.git"
     },
     "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/scaleton-labs/highload-wallet/issues"
+    },
+    "homepage": "https://github.com/scaleton-labs/highload-wallet#readme",
     "scripts": {
         "start": "blueprint run",
         "build": "tsc --project tsconfig.npm.json",

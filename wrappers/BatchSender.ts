@@ -14,6 +14,7 @@ export class BatchSender implements Sender {
     private readonly provider: ContractProvider,
     private readonly wallet: HighloadWalletV2,
     private readonly secretKey: Buffer,
+    private readonly batchSize: number,
   ) {}
 
   get address(): Address {
@@ -40,12 +41,10 @@ export class BatchSender implements Sender {
   }
 
   async submit() {
-    const chunkSize = 254;
-
-    for (let i = 0; i < this.messages.length; i += chunkSize) {
+    for (let i = 0; i < this.messages.length; i += this.batchSize) {
       await this.wallet.sendTransfer(this.provider, {
         queryId: this.wallet.generateQueryId(),
-        messages: this.messages.slice(i, i + chunkSize),
+        messages: this.messages.slice(i, i + this.batchSize),
         secretKey: this.secretKey,
       });
     }
